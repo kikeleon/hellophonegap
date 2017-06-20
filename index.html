@@ -43,7 +43,7 @@
     <title>Hello World</title>
     <script>
     //$("#btnobtener").on("click", obtener );
-
+    var mnsError="NO SE PUEDE OBTENER POSICION";
     function obtener(){
         //navigator.geolocation.getCurrentPosition(mostrar, gestionarErrores);
         //navigator.geolocation.getCurrentPosition(mostrar,manejoError);
@@ -68,7 +68,8 @@
         $("#txtDato").val("Latitud :" + posicion.coords.latitude + " - Longitud :" +posicion.coords.longitude);
     }
      function manejoError(){
-         $("#geolocation").text("NO SE PUDEDE OBTENER DATOS DE POSICION");
+         $("#geolocation").text(mnsError);
+         mnsError=mnsError+".";
      }
 
     </script>
