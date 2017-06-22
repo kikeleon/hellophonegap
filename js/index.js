@@ -34,6 +34,11 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
+        navigator.geolocation.getCurrentPosition(onSuccess, onError , {
+            maximumAge : Infinity,
+            timeout : 5000,
+            enableHighAccuracy : false
+        });
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -43,11 +48,10 @@ var app = {
 
         listeningElement.setAttribute('style', 'display:none;');
         receivedElement.setAttribute('style', 'display:block;');
-
-        alert('Received Event: ' + id);
         
-                // Throw an error if no update is received every 30 seconds
+        //alert('Received Event: ' + id);
+        //app.cargarGps();
        
-
-    }
+    }    
+    
 };

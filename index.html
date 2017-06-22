@@ -39,16 +39,24 @@
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
     <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
     <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/index.css" />
-    <title>Hello World</title>
+    <!--<link rel="stylesheet" type="text/css" href="css/index.css" />-->
+
+    <link rel="stylesheet" href="css/didacta.min.css" />
+    <link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />
+    <link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css" />
+
+    <script src="js/jquery.mobile-1.2.0.min.js"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js"></script>
+    <link href="webapp.css" rel="stylesheet" type="text/css">
+    <title>espaciointernet hola PG</title>
     <script>
     //$("#btnobtener").on("click", obtener );
-    var mnsError="NO SE PUEDE OBTENER POSICION";
+
     function obtener(){
         //navigator.geolocation.getCurrentPosition(mostrar, gestionarErrores);
         //navigator.geolocation.getCurrentPosition(mostrar,manejoError);
         //
-        var options = { timeout: 30000 };
+        var options = { timeout: 30000, enableHighAccuracy: true };
         watchID = navigator.geolocation.watchPosition(mostrar, manejoError, options);
         
     }
@@ -64,14 +72,39 @@
     }
         
     function mostrar(posicion){
+        if (tieneInternetSN()){
+            mostrarMapa(posicion);
+        }
         
         $("#txtDato").val("Latitud :" + posicion.coords.latitude + " - Longitud :" +posicion.coords.longitude);
     }
-     function manejoError(){
-         $("#geolocation").text(mnsError);
-         mnsError=mnsError+".";
+     function manejoError(error){
+        var errortmp="";
+        errortmp = 'code: '  + error.code + '\n' +'message: ' + error.message + '\n';
+         $("#geolocation").text(errortmp);
      }
 
+     function tieneInternetSN(){
+         /*retorna Si tiene internet los siguientes numeros*
+          * 1-desconocido
+          * 2-ethernet
+          * 3-wifi
+          * 4-2g
+          * 5-3g
+          * 6-4g
+          * 7-cell
+          * 8-none
+          * @type window.navigator.connection.type|navigator.connection.type|Navigator.connection.type
+          */
+         var internetSN = false;
+         var retCon = navigator.connection.type;
+         if ((retCon === 2) || (retCon === 3) || (retCon === 4) || (retCon === 5) || (retCon === 6) || (retCon === 7)){
+             internetSN = true;
+         }
+         else
+             internetSN = false;
+         return internetSN;
+     }
     </script>
 </head>
 
@@ -84,17 +117,21 @@
 
     </script>
     <div class="app">
-        <h1>PhoneGap</h1>
-        <div id="deviceready" class="blink">
-            <p class="event listening">Connecting to Device</p>
-            <p class="event received">Device is Ready</p>
+        <div data-role="page" data-theme="b">
+            <div data-role="header"><h1>SISTEMA OPINADOR EN LINEA</h1></div>
+            <div id="deviceready">
+                <p class="event listening">Conectando...</p>
+                <p class="event received">Conectado!</p>
+            </div>
+                
+            <div>
+                <input type="button" value="Obtener" id="btnobtener">
+                <input type="text" id="txtDato">
+            </div>
+            <div id="map"></div>
+            <p id="geolocation">Watching geolocation...</p>
+            <div data-role="footer"><h3>COPYRIGHT by espaciointernet.com 2017</h3></div>
         </div>
-        <div>
-            <input type="button" value="Obtener" id="btnobtener">
-            <input type="text" id="txtDato">
-        </div>
-        <div id="map"></div>
-        <p id="geolocation">Watching geolocation...</p>
     </div>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/phonegaputils.js"></script>
