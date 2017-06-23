@@ -98,12 +98,15 @@
           */
          var internetSN = false;
          var retCon = navigator.connection.type;
-         if ((retCon === 2) || (retCon === 3) || (retCon === 4) || (retCon === 5) || (retCon === 6) || (retCon === 7)){
+         $("#red").text(retCon);
+         /*if ((retCon === 2) || (retCon === 3) || (retCon === 4) || (retCon === 5) || (retCon === 6) || (retCon === 7)){
              internetSN = true;
-         }
-         else
-             internetSN = false;
-         return internetSN;
+         }*/
+        if ((retCon !== "UNKNOWN") || (retCon !== "NONE"))
+            internetSN = true;
+        else
+            internetSN = false;
+        return internetSN;
      }
     </script>
 </head>
@@ -123,7 +126,7 @@
                 <p class="event listening">Conectando...</p>
                 <p class="event received">Conectado!</p>
             </div>
-                
+            <p id="red"> </p>
             <div>
                 <input type="button" value="Obtener" id="btnobtener">
                 <input type="text" id="txtDato">
