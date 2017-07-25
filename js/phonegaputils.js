@@ -82,14 +82,14 @@ function mostrarMapa(posicion){
 function mostrar(posicion){
     if (!bContaIni){
         horIni= new Date();
-        millisegsIni = horIni.getMilliseconds();
+        millisegsIni = horIni.getTime();
         objPositionIni=posicion;
         $("#horIni").text("Hora Inicio : "+horIni.getHours()+":"+horIni.getMinutes()+":"+horIni.getSeconds());        
         bContaIni = true;
     }
     else{
         horAct = new Date();
-        millisegsAct = horAct.getMilliseconds();
+        millisegsAct = horAct.getTime();
         objPositionAct=posicion;
         $("#horAct").text("Hora Actual : "+horAct.getHours()+":"+horAct.getMinutes()+":"+horAct.getSeconds());
     }
@@ -97,6 +97,7 @@ function mostrar(posicion){
     aLatLon.push(objPositionIni.coords.latitude,objPositionIni.coords.longitude); 
     
     $("#timRec").text(restarFechasEnSegs(horAct, horIni)+" segs");    //$("#geolocation").text("Latitud :" + posicion.coords.latitude + " - Longitud :" +posicion.coords.longitude);
+    //$("#timRec").text(millisegsIni.toString());
     mostrarPosiciones();
     if (tieneInternetSN() && $("verMapa").val()==="verMapa"){
         mostrarMapa(posicion);
@@ -163,13 +164,14 @@ function restarFechasEnSegs(hini,hfin){
 
 function getKilometros(lat1,lon1,lat2,lon2){
     //var R = 6378.137; //Radio de la tierra en km
-    R = 6;//para hacer pruebas
+    R = 60000000;//para hacer pruebas
     var dLat = rads( lat2 - lat1 );
     var dLong = rads( lon2 - lon1 );
     var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(rads(lat1)) * Math.cos(rads(lat2)) * Math.sin(dLong/2) * Math.sin(dLong/2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     var d = R * c;
-    return d.toFixed(3); //Retorna tres decimales
+    //return d.toFixed(3); //Retorna tres decimales
+    return d;
 }
 
 function rads(x){
