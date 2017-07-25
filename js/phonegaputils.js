@@ -5,7 +5,8 @@
  */
 var objPositionIni;
 var objPositionAct;
-var aLatLon = [0,0];
+var aLat=new Array();
+var aLon=new Array();
 var horIni;
 var horAct;
 var millisegsIni;
@@ -82,22 +83,24 @@ function mostrarMapa(posicion){
 function mostrar(posicion){
     if (!bContaIni){
         horIni= new Date();
-        millisegsIni = horIni.getTime();
         objPositionIni=posicion;
         $("#horIni").text("Hora Inicio : "+horIni.getHours()+":"+horIni.getMinutes()+":"+horIni.getSeconds());        
         bContaIni = true;
+        //aLat.push("4.59488357");
+        //aLon.push("-74.15688198");
     }
     else{
         horAct = new Date();
-        millisegsAct = horAct.getTime();
         objPositionAct=posicion;
         $("#horAct").text("Hora Actual : "+horAct.getHours()+":"+horAct.getMinutes()+":"+horAct.getSeconds());
+        aLat.push(objPositionIni.coords.latitude);
+        aLon.push(objPositionIni.coords.longitude);
     }
     
-    aLatLon.push(objPositionIni.coords.latitude,objPositionIni.coords.longitude); 
+
     
-    $("#timRec").text(restarFechasEnSegs(horAct, horIni)+" segs");    //$("#geolocation").text("Latitud :" + posicion.coords.latitude + " - Longitud :" +posicion.coords.longitude);
-    //$("#timRec").text(millisegsIni.toString());
+    $("#timRec").text(restarFechasEnSegs( horIni, horAct)+" segs");    //$("#geolocation").text("Latitud :" + posicion.coords.latitude + " - Longitud :" +posicion.coords.longitude);
+    //$("#timRec").text(toString());
     mostrarPosiciones();
     if (tieneInternetSN() && $("verMapa").val()==="verMapa"){
         mostrarMapa(posicion);
@@ -107,6 +110,8 @@ function mostrar(posicion){
 }
 
 function restarFechasEnSegs(hini,hfin){
+    millisegsIni = hini.getTime();
+    millisegsAct = hfin.getTime();
     return (millisegsAct - millisegsIni)/1000;
 }
 
@@ -145,33 +150,32 @@ function restarFechasEnSegs(hini,hfin){
      $("#latlonIni").text("Inicio en : " + objPositionIni.coords.latitude + " , " + objPositionIni.coords.longitude);
      $("#latlonAct").text("Actual en : " + objPositionAct.coords.latitude + " , " + objPositionAct.coords.longitude);
      //$("#disRec").text("Distancia recorrido : " + calcularDistanciaTotal().toString());
-     ftemp+=1;
-     eldato=" "+ calcularDistanciaTotal();
-     $("#disRec").text("Distancia recorrido : " + eldato);
- 
- }
+     eldato= calcularDistanciaTotal();
+     $("#disRec").text("Distancia recorrido : " + eldato.toString());
+  }
  
  function calcularDistanciaTotal(){
-
-     ftemp+=1;
-     for (i = 1; i < aLatLon; i++) {
-         fsumador += getKilometros(parceFloat(aLatLon[i-1][0]),parceFloat(aLatLon[i-1][1]),parceFloat(aLatLon[i][0]),parceFloat(aLatLon[i][0]));
+     
+     fsumador=0;
+     //return getKilometros(4.59488357,-74.15688198,4.6261026,-74.1476059);
+     for (i = 1; i < aLat.length; i++) {
+         fsumador = fsumador + parseFloat(getKilometros(parseFloat(aLat[i-1]),parseFloat(aLon[i-1]),parseFloat(aLat[i]),parseFloat(aLon[i])));
      }
-     //return fsumador;
      return fsumador;
+     
  }
  
 
 function getKilometros(lat1,lon1,lat2,lon2){
-    //var R = 6378.137; //Radio de la tierra en km
-    R = 60000000;//para hacer pruebas
+    var R = 6378.137; //Radio de la tierra en km
+    //R = 60000000;//para hacer pruebas
     var dLat = rads( lat2 - lat1 );
     var dLong = rads( lon2 - lon1 );
     var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(rads(lat1)) * Math.cos(rads(lat2)) * Math.sin(dLong/2) * Math.sin(dLong/2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     var d = R * c;
-    //return d.toFixed(3); //Retorna tres decimales
-    return d;
+    return d.toFixed(3); //Retorna tres decimales
+    //return R;
 }
 
 function rads(x){
