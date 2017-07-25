@@ -11,12 +11,16 @@ var horAct;
 var millisegsIni;
 var millisegsAct;
 var bContaIni = false;
+var fsumador=0;
+var ftemp=0;
+
 function get_loc() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(coordenadas);
     }else{
         alert('Este navegador es algo antiguo, actualiza para usar el API de localización');                  }
 }
+
 function coordenadas(position) {
       var lat = position.coords.latitude;
       var lon = position.coords.longitude;
@@ -24,6 +28,7 @@ function coordenadas(position) {
       map.src = "http://maps.google.com/maps/api/staticmap?center=" + lat + "," 
               + lon + "&amp;zoom=15&amp;size=300x300&amp;markers=color:red|label:A|" + lat + "," + lon + "&amp;sensor=false";
 }
+
 function iniciarMapa(){
     if ("geolocation" in navigator){ //check Geolocation available 
         //things to do
@@ -31,6 +36,7 @@ function iniciarMapa(){
         $("#geolocation").text("No existe geolocation");
     }
 }
+
 function onSuccess(position) {
     //var element = document.getElementById('geolocation');
     objPositionIni=position;
@@ -137,21 +143,27 @@ function restarFechasEnSegs(hini,hfin){
  function mostrarPosiciones(){
      $("#latlonIni").text("Inicio en : " + objPositionIni.coords.latitude + " , " + objPositionIni.coords.longitude);
      $("#latlonAct").text("Actual en : " + objPositionAct.coords.latitude + " , " + objPositionAct.coords.longitude);
-     $("#disRec").text("Distancia recorrido : " + calcularDistanciaTotal().toString());
+     //$("#disRec").text("Distancia recorrido : " + calcularDistanciaTotal().toString());
+     ftemp+=1;
+     eldato=" "+ calcularDistanciaTotal();
+     $("#disRec").text("Distancia recorrido : " + eldato);
  
  }
  
  function calcularDistanciaTotal(){
-     var fsumador=0;
+
+     ftemp+=1;
      for (i = 1; i < aLatLon; i++) {
          fsumador += getKilometros(parceFloat(aLatLon[i-1][0]),parceFloat(aLatLon[i-1][1]),parceFloat(aLatLon[i][0]),parceFloat(aLatLon[i][0]));
      }
+     //return fsumador;
      return fsumador;
  }
  
 
 function getKilometros(lat1,lon1,lat2,lon2){
-    var R = 6378.137; //Radio de la tierra en km
+    //var R = 6378.137; //Radio de la tierra en km
+    R = 6;//para hacer pruebas
     var dLat = rads( lat2 - lat1 );
     var dLong = rads( lon2 - lon1 );
     var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(rads(lat1)) * Math.cos(rads(lat2)) * Math.sin(dLong/2) * Math.sin(dLong/2);
