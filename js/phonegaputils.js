@@ -282,9 +282,11 @@ function fileDonotexist(dirEntry) {
         fail);
 }
 function gotFileEntry(fileEntryWrite) {
+    $("#listening").text("gotFileEntry");
     fileEntryWrite.createWriter(gotFileWriter, fail);
 }
 function gotFileWriter(writer) {
+    $("#listening").text("gotFileWriter");
     writer.onerror = function(evt) {
     };
     writer.write("algo");
