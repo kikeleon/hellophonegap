@@ -14,6 +14,7 @@ var millisegsAct;
 var bContaIni = false;
 var fsumador=0;
 var ftemp=0;
+var nomArchivoTexto="prueba.txt";
 
 function get_loc() {
     if (navigator.geolocation) {
@@ -187,7 +188,7 @@ function rads(x){
 
 function escribir(){
     $("#listening").text("escribiendo archivo1");
-    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
+    window.requestFileSystem(cordova.file.externalRootDirectory, 0, gotFS, fail);
 
     //window.requestFileSystem(cordova.file.externalRootDirectory,0, gotFS, fail);
 
@@ -197,7 +198,7 @@ function escribir(){
     //fileApi.writeTextFile("pepito.txt","prueba");
     //$("#listening").text("escribiendo archivo2");
 }
-
+/*
 function gotFS(fileSystem) {
     fileSystem.root.getFile("/datos/pepito.txt", {create: true, exclusive: false}, gotFileEntry, fail);
 }
@@ -217,8 +218,8 @@ function gotFileWriter(writer) {
 
 function fail(error) {
     $("#listening").text(error.code + "mio");
-}
-
+}*/
+/*
 var fileApi = {
   initialize: function(){
     //window.resolveLocalFileSystemURL(cordova.file.externalDataDirectory, fileApi.onDir, fileApi.onError);
@@ -259,5 +260,57 @@ var onFile = function(fileEntry) {
       }, fileApi.onError);
       $("#listening").text("Se escribio el archivo");
     };
+  */ 
    
-   
+function gotFS(fileSystem) {
+    fileSystem.root.getDirectory("DO_NOT_DELETE", 
+        {create: true, exclusive: false}, 
+        gotDirEntry, 
+        fail);
+}
+function gotDirEntry(dirEntry) {
+    dir = dirEntry;
+    dirEntry.getFile(nomArchivoTexto, 
+        {create: false, exclusive: false}, 
+        readSuccess, 
+        fileDonotexist);
+}
+function fileDonotexist(dirEntry) {
+    dir.getFile(nomArchivoTexto, 
+        {create: true, exclusive: false}, 
+        gotFileEntry, 
+        fail);
+}
+function gotFileEntry(fileEntryWrite) {
+    fileEntryWrite.createWriter(gotFileWriter, fail);
+}
+function gotFileWriter(writer) {
+    writer.onerror = function(evt) {
+    };
+    writer.write("algo");
+    writer.onwriteend = function(evt) {
+        dir.getFile(nomArchivoTexto, 
+            {create: false, exclusive: false}, 
+            readSuccess, 
+            fail);
+    };
+}
+function readSuccess(fileE) {
+    fileE.file(readAsText, fail);
+    $("#listening").text("readSuccess");
+}
+function fail(error) {
+    $("#listening").text("error nume: "+ error.code);
+}
+function readAsText(readerDummy) {
+    var reader = new FileReader();
+
+    reader.onloadstart = function(evt) {};
+    reader.onprogress = function(evt) {};
+    reader.onerror = function(evt) {};
+
+    reader.onloadend = function(evt) {
+        $("#listening").text("lectura hecha");
+    };
+    reader.readAsText(readerDummy);
+}   
