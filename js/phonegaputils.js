@@ -192,7 +192,7 @@ function escribir(){
 
     //window.requestFileSystem(cordova.file.externalRootDirectory,0, gotFS, fail);
 
-    $("#listening").text(cordova.file.externalRootDirectory);
+    $("#listening").text("directorio externo:"+cordova.file.externalRootDirectory);
 
     
     //fileApi.writeTextFile("pepito.txt","prueba");
