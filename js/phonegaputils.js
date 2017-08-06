@@ -68,6 +68,7 @@ function obtener(){
     //$("#horIni").text(horIni.toString());
     watchID = navigator.geolocation.watchPosition(mostrar, manejoError, options);
     //mostrar();
+    
 }
 
 function mostrarMapa(posicion){
@@ -152,6 +153,8 @@ function restarFechasEnSegs(hini,hfin){
      //$("#disRec").text("Distancia recorrido : " + calcularDistanciaTotal().toString());
      eldato= calcularDistanciaTotal();
      $("#disRec").text("Distancia recorrido : " + eldato.toString());
+     $("#listening").text("se va a escribir");
+     escribir();
   }
  
  function calcularDistanciaTotal(){
@@ -181,3 +184,80 @@ function getKilometros(lat1,lon1,lat2,lon2){
 function rads(x){
     return x*Math.PI/180;
 }
+
+function escribir(){
+    $("#listening").text("escribiendo archivo1");
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
+
+    //window.requestFileSystem(cordova.file.externalRootDirectory,0, gotFS, fail);
+
+    $("#listening").text(cordova.file.externalRootDirectory);
+
+    
+    //fileApi.writeTextFile("pepito.txt","prueba");
+    //$("#listening").text("escribiendo archivo2");
+}
+
+function gotFS(fileSystem) {
+    fileSystem.root.getFile("/datos/pepito.txt", {create: true, exclusive: false}, gotFileEntry, fail);
+}
+
+function gotFileEntry(fileEntry) {
+    fileEntry.createWriter(gotFileWriter, fail);
+}
+
+function gotFileWriter(writer) {
+    writer.onwrite = function(evt) {
+        $("#listening").text("se escribio ok");
+    };
+    writer.seek(writer.length);
+    //writer.write(objPositionAct.coords.latitude);
+    writer.write("alguna cosa");
+}
+
+function fail(error) {
+    $("#listening").text(error.code + "mio");
+}
+
+var fileApi = {
+  initialize: function(){
+    //window.resolveLocalFileSystemURL(cordova.file.externalDataDirectory, fileApi.onDir, fileApi.onError);
+  },
+  onDir: function(directoryEntry) {
+    fileApi.dir = directoryEntry;
+  },
+  onError: function(err) {
+    alert(err.code);
+  },
+   writeTextFile: function(file, content, callback) {
+    var onFile = function(fileEntry) {
+      fileEntry.createWriter(function(fileWriter){
+        fileWriter.write(content);
+        callback && callback(content);
+      }, fileApi.onError);
+    };
+    fileApi.dir.getFile(file, {create: true}, onFile, fileApi.onError);
+  },
+  readTextFile: function(file, callback) {
+    var onFile = function(fileEntry) {
+      //convierte el fileEntry en un fileObject
+      fileEntry.file(function(fileObject){
+        var reader = new FileReader();
+        reader.onloadend = function(){
+          callback && callback(this.result);
+        };
+        reader.readAsText(fileObject);
+      });
+    };
+    fileApi.dir.getFile(file, {create:false}, onFile, fileApi.onError);
+  }
+};
+var onFile = function(fileEntry) {
+      fileEntry.createWriter(function(fileWriter){
+        fileWriter.write(content);
+        //callback && callback(content);
+      }, fileApi.onError);
+      $("#listening").text("Se escribio el archivo");
+    };
+   
+   
