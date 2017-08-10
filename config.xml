@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.espaciointernet.helloworld" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-    <name>hola mundo PhoneGap</name>
+<widget id="com.espaciointernet.taximetroGPS" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name>TAXIMETRO GPS</name>com.espaciointernet.taximetroGPS
     <description>
-        manejo basico de posicion.
+        Taximetro basado en la posicion
     </description>
     <author email="webmaster@espaciointernet.com" href="http://espaciointernet.com">
         espaciointernet.com Enrique Leon
@@ -100,9 +100,6 @@
         <icon height="360" platform="windows" src="www/res/icon/windows/Wide310x150Logo.scale-240.png" width="744" />
         <splash height="1920" platform="windows" src="www/res/screen/windows/SplashScreenPhone.scale-240.png" width="1152" />
     </platform>
-    <feature name="Geolocation">
-        <param name="android-package" value="org.apache.cordova.GeoBroker" />
-    </feature>
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -112,7 +109,6 @@
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
-
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
