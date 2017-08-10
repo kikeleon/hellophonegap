@@ -139,7 +139,7 @@ function restarFechasEnSegs(hini,hfin){
       */
      var internetSN = false;
      var retCon = navigator.connection.type;
-     retCon.toUpperCase();al
+     retCon.toUpperCase();
      $("#red").text(navigator.connection.type);
      /*if ((retCon === 2) || (retCon === 3) || (retCon === 4) || (retCon === 5) || (retCon === 6) || (retCon === 7)){
          internetSN = true;
