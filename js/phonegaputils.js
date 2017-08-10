@@ -59,7 +59,8 @@ function onError(error) {
 
 function obtener(){
     //navigator.geolocation.getCurrentPosition(mostrar, gestionarErrores);
-    //navigator.geolocation.getCurrentPosition(mostrar,manejoError);
+    //navigator.geolocation.getCurrentPosition(mostrar,manejoErfileApi
+    //ror);
     //
     horIni= new Date();
     $("#geolocation").text("obteniendo direccion...");
@@ -88,6 +89,8 @@ function mostrar(posicion){
         objPositionIni=posicion;
         $("#horIni").text("Hora Inicio : "+horIni.getHours()+":"+horIni.getMinutes()+":"+horIni.getSeconds());        
         bContaIni = true;
+        aLat.push(objPositionIni.coords.latitude);
+        aLon.push(objPositionIni.coords.longitude);
         //aLat.push("4.59488357");
         //aLon.push("-74.15688198");
     }
@@ -95,19 +98,18 @@ function mostrar(posicion){
         horAct = new Date();
         objPositionAct=posicion;
         $("#horAct").text("Hora Actual : "+horAct.getHours()+":"+horAct.getMinutes()+":"+horAct.getSeconds());
-        aLat.push(objPositionIni.coords.latitude);
-        aLon.push(objPositionIni.coords.longitude);
-    }
-    
-
-    
-    $("#timRec").text(restarFechasEnSegs( horIni, horAct)+" segs");    //$("#geolocation").text("Latitud :" + posicion.coords.latitude + " - Longitud :" +posicion.coords.longitude);
-    //$("#timRec").text(toString());
-    mostrarPosiciones();
-    if (tieneInternetSN() && $("verMapa").val()==="verMapa"){
+        aLat.push(objPositionAct.coords.latitude);
+        aLon.push(objPositionAct.coords.longitude);
+        $("#timRec").text(restarFechasEnSegs( horIni, horAct)+" segs");    //$("#geolocation").text("Latitud :" + posicion.coords.latitude + " - Longitud :" +posicion.coords.longitude);
+        //$("#timRec").text(toString());
+        mostrarPosiciones();
+        if (tieneInternetSN() && $("verMapa").val()==="verMapa"){
         mostrarMapa(posicion);
+        }
+        //$("#txtDato").value("Latitud :" + posicion.coords.latitude + " - Longitud :" +posicion.coords.longitude);
     }
-    //$("#txtDato").value("Latitud :" + posicion.coords.latitude + " - Longitud :" +posicion.coords.longitude);
+
+
     
 }
 
@@ -136,7 +138,8 @@ function restarFechasEnSegs(hini,hfin){
       * @type window.navigator.connection.type|navigator.connection.type|Navigator.connection.type
       */
      var internetSN = false;
-     var retCon = String.toUpperCase(navigator.connection.type);
+     var retCon = navigator.connection.type;
+     retCon.toUpperCase();al
      $("#red").text(navigator.connection.type);
      /*if ((retCon === 2) || (retCon === 3) || (retCon === 4) || (retCon === 5) || (retCon === 6) || (retCon === 7)){
          internetSN = true;
@@ -154,6 +157,9 @@ function restarFechasEnSegs(hini,hfin){
      //$("#disRec").text("Distancia recorrido : " + calcularDistanciaTotal().toString());
      eldato= calcularDistanciaTotal();
      $("#disRec").text("Distancia recorrido : " + eldato.toString());
+     
+     eldato=getMetros(parseFloat(objPositionAct.coords.latitude),parseFloat(objPositionAct.coords.longitude),parseFloat(objPositionIni.coords.latitude),parseFloat(objPositionIni.coords.longitude));
+     $("#disRecUlt").text("Ultima Distancia recorrido : " + eldato.toString());
      $("#listening").text("se va a escribir");
      escribir();
   }
@@ -168,10 +174,21 @@ function restarFechasEnSegs(hini,hfin){
      return fsumador;
      
  }
- 
 
 function getKilometros(lat1,lon1,lat2,lon2){
     var R = 6378.137; //Radio de la tierra en km
+    //R = 60000000;//para hacer pruebas
+    var dLat = rads( lat2 - lat1 );
+    var dLong = rads( lon2 - lon1 );
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(rads(lat1)) * Math.cos(rads(lat2)) * Math.sin(dLong/2) * Math.sin(dLong/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var d = R * c;
+    return d.toFixed(3); //Retorna tres decimales
+    //return R;
+}
+
+function getMetros(lat1,lon1,lat2,lon2){
+    var R = 6378137; //Radio de la tierra en mts
     //R = 60000000;//para hacer pruebas
     var dLat = rads( lat2 - lat1 );
     var dLong = rads( lon2 - lon1 );
