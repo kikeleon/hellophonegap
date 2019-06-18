@@ -1,147 +1,68 @@
-
+<!DOCTYPE html>
 <!--
-    Copyright (c) 2012-2016 Adobe Systems Incorporated. All rights reserved.
-
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
 -->
 <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+        <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+        <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' gap:; style-src 'self' 'unsafe-inline'; media-src *" />
+        <!-- Good default declaration:
+        * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+        * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+        * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+            * Enable inline JS: add 'unsafe-inline' to default-src
+            * Enable eval(): add 'unsafe-eval' to default-src
+        * Create your own at http://cspisawesome.com
+        -->
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="msapplication-tap-highlight" content="no" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
-    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
-    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
-    <!-- Good default declaration:
-    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-        * Enable inline JS: add 'unsafe-inline' to default-src
-        * Enable eval(): add 'unsafe-eval' to default-src
-    * Create your own at http://cspisawesome.com
-    -->
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
-    <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
-    <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
-    <!--<link rel="stylesheet" type="text/css" href="css/index.css" />-->
-
-    <link rel="stylesheet" href="css/didacta.min.css" />
-    <link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />
-    <link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css" />
-
-    <script src="js/jquery.mobile-1.2.0.min.js"></script>
-    <script src="js/jquery.mobile-1.4.5.min.js"></script>
-    <link href="webapp.css" rel="stylesheet" type="text/css">
-    <title>espaciointernet hola PG</title>
-    <script>
-    //$("#btnobtener").on("click", obtener );
-
-    function obtener(){
-        //navigator.geolocation.getCurrentPosition(mostrar, gestionarErrores);
-        //navigator.geolocation.getCurrentPosition(mostrar,manejoError);
-        //
-        var options = { timeout: 30000, enableHighAccuracy: true };
-        watchID = navigator.geolocation.watchPosition(mostrar, manejoError, options);
+        <title>Bluetooth</title>
         
-    }
-    
-    function mostrarMapa(posicion){
-        
-        var ubicacion=document.getElementById('map');
-        var mapurl='http://maps.google.com/maps/api/staticmap?center='+
-        posicion.coords.latitude+','+posicion.coords.longitude+
-        '&zoom=12&size=200x200&sensor=false&markers='+posicion.coords.latitude+
-        ','+posicion.coords.longitude;
-        ubicacion.innerHTML='<img src="'+mapurl+'">';
-    }
-        
-    function mostrar(posicion){
-        if (tieneInternetSN()){
-            mostrarMapa(posicion);
-        }
-        
-        $("#txtDato").val("Latitud :" + posicion.coords.latitude + " - Longitud :" +posicion.coords.longitude);
-    }
-     function manejoError(error){
-        var errortmp="";
-        errortmp = 'code: '  + error.code + '\n' +'message: ' + error.message + '\n';
-         $("#geolocation").text(errortmp);
-     }
+        <link rel="stylesheet" href="css/didacta.css" />
+        <link rel="stylesheet" href="css/jquery.mobile.icons.min.css" />
+        <link rel="stylesheet" href="css/jquery.mobile.structure-1.4.5.min.css"/>
+        <link rel="stylesheet" href="css/index.css"/> 
+        <script src="js/jquery-1.11.1.min.js"></script>
+        <script src="js/jquery.mobile-1.4.5.min.js"></script> 
+        <script src="js/phonegaputils.js"></script>
 
-     function tieneInternetSN(){
-         /*retorna Si tiene internet los siguientes numeros*
-          * 1-desconocido
-          * 2-ethernet
-          * 3-wifi
-          * 4-2g
-          * 5-3g
-          * 6-4g
-          * 7-cell
-          * 8-none
-          * @type window.navigator.connection.type|navigator.connection.type|Navigator.connection.type
-          */
-         var internetSN = false;
-         var retCon = navigator.connection.type;
-         $("#red").text(retCon);
-         /*if ((retCon === 2) || (retCon === 3) || (retCon === 4) || (retCon === 5) || (retCon === 6) || (retCon === 7)){
-             internetSN = true;
-         }*/
-        if ((retCon !== "UNKNOWN") || (retCon !== "NONE"))
-            internetSN = true;
-        else
-            internetSN = false;
-        return internetSN;
-     }
-    </script>
-</head>
-
-<body>
-    <script  language="javascript" type="text/javascript">
-        $(document).ready(function(){
-            var $test = $("#btnobtener");
-            $test.on("click",obtener);
-        });
-
-    </script>
+    </head>
+    <body>
     <div class="app">
-        <div data-role="page" data-theme="b">
-            <div data-role="header"><h1>SISTEMA OPINADOR EN LINEA</h1></div>
-            <div id="deviceready">
-                <p class="event listening">Conectando...</p>
-                <p class="event received">Conectado!</p>
+        
+        <div data-role="page" data-theme="a">
+            <div id="encabezado" data-role="header" data-position="fixed" >
+                <a href="javascript:obtener();" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left" id="btnConectar">Conectar</a>
+                <h1 id="estadoConeccion">Desconectado</h1>
+                
             </div>
-            <p id="red"> </p>
-            <div>
-                <input type="button" value="Obtener" id="btnobtener">
-                <input type="text" id="txtDato">
+            <div id="deviceready" style="display: none">
+                
             </div>
-            <div id="map"></div>
-            <p id="geolocation">Watching geolocation...</p>
-            <div data-role="footer"><h3>COPYRIGHT by espaciointernet.com 2017</h3></div>
+            <div id="info">
+                <div id="cargando" style="display: none;" >
+                    <img src="cargando.gif" id="imgcargando" alt="cargando">
+                    <strong id="textocargando">Cargando...</strong>
+                </div>
+                <button id="connectButton">Connect</button>
+
+            </div>
+
+            <div data-role="footer" data-position="fixed">
+
+            </div>
         </div>
     </div>
     <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="js/phonegaputils.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript">
         app.initialize();
     </script>
-</body>
-
+    </body>
 </html>
